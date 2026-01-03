@@ -1,0 +1,60 @@
+/*
+class Node {
+    int data;
+    Node next;
+    Node bottom;
+
+    Node(int x) {
+        data = x;
+        next = null;
+        bottom = null;
+    }
+}
+*/
+class Solution {
+    public Node flatten(Node root) {
+        if(root == null || root.next == null) return root;
+        Node first = root;
+        Node sec = root.next;
+        
+        while(sec != null){
+            first = merge(first, sec);
+            sec = sec.next;
+        }
+        return first;
+    }
+    public Node merge(Node first, Node sec){
+        Node head1 = first;
+        Node head2 = sec;
+        Node head = null;
+        Node tail = null;
+        while(head1 != null && head2 != null){
+            if(head1.data <= head2.data){
+                if(head == null){
+                    head = head1;
+                    tail = head1;
+                }else{
+                    tail.bottom = head1;
+                    tail = tail.bottom;
+                }
+                head1 = head1.bottom;
+            }else{
+                if(head == null){
+                    head = head2;
+                    tail = head2;
+                }else{
+                    tail.bottom = head2;
+                    tail = tail.bottom;
+                }
+                head2 = head2.bottom;
+            }
+            if(head1 != null){
+                tail.bottom = head1;
+            }
+            if(head2 != null){
+                tail.bottom = head2;
+            }
+        }
+        return head;
+    }
+}
