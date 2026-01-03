@@ -1,0 +1,49 @@
+class Solution {
+    int[][] dp;
+    String[] states = {
+            "RYG", "RGY", "RYR", "RGR",
+            "YRG", "YGR", "YGY", "YRY",
+            "GRY", "GYR", "GRG", "GYG"
+    };
+
+    int mod = 1_000_000_007;
+    int res;
+
+    public int numOfWays(int n) {
+        dp = new int[n][12];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < 12; j++)
+                dp[i][j] = -1;
+        }
+        for (int i = 0; i < 12; i++) {
+            res = (res + helper(n - 1, i)) % mod;
+        }
+        return res;
+    }
+
+    public int helper(int n, int prevRowIdx) {
+        if (n == 0)
+            return 1;
+
+        if (dp[n][prevRowIdx] != -1)
+            return dp[n][prevRowIdx];
+        
+        res = 0;
+        String prevRow = states[prevRowIdx];
+        for (int i = 0; i < 12; i++) {
+            if (i == prevRowIdx)
+                continue;
+            boolean isSame = false;
+            for (int j = 0; j < 3; j++) {
+                if (states[i].charAt(j) == prevRow.charAt(j)) {
+                    isSame = true;
+                    break;
+                }
+            }
+            if (!isSame) {
+                res = (res + helper(n - 1, i)) % mod;
+            }
+        }
+        return dp[n][prevRowIdx] = res;
+    }
+}
