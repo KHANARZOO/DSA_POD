@@ -1,0 +1,43 @@
+class Solution {
+    ArrayList<Integer> countDistinct(int arr[], int k) {
+        int n = arr.length;
+        //Brute Force Approach
+        ArrayList<Integer> li = new ArrayList<>();
+        HashSet<Integer> set = new HashSet<>();
+        int count = 0;
+        for(int i=0; i<n; i++){
+            count = 0;
+            for(int j=i; j<n; j++){
+                set.add(arr[j]);
+                if((j - i + 1) == k){
+                    li.add(set.size());
+                    break;
+                }
+            }
+            set.clear();
+        }
+        return li;
+    }
+}
+======================================================================
+class Solution {
+    ArrayList<Integer> countDistinct(int arr[], int k) {
+        int n = arr.length;
+        ArrayList<Integer> li = new ArrayList<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i=0; i<k; i++) map.put(arr[i], map.getOrDefault(arr[i], 0)+ 1);
+        li.add(map.size());
+        int si = 1;
+        int ed = k;
+        
+        while(ed < n){
+            map.put(arr[si - 1], map.getOrDefault(arr[si - 1], 0)- 1);
+            if(map.get(arr[si - 1]) == 0) map.remove(arr[si - 1]);
+            map.put(arr[ed], map.getOrDefault(arr[ed], 0) + 1);
+            li.add(map.size());
+            si+=1;
+            ed+=1;
+        }
+        return li;
+    }
+}
