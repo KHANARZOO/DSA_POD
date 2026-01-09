@@ -1,0 +1,41 @@
+class Solution {
+    public int countAtMostK(int arr[], int k) {
+        int n = arr.length;
+        //Brute Force Approach
+        int count = 0;
+        HashSet<Integer> set = new HashSet<>();
+        
+        for(int i=0; i<n; i++){
+            for(int j=i; j<n; j++){
+                set.add(arr[j]);
+                if(set.size() <= k) count += 1;
+                else break;
+            }
+            set.clear();
+        }
+        return count;
+    }
+}
+==================================================================
+class Solution {
+    public int countAtMostK(int arr[], int k) {
+        int n = arr.length;
+        int count = 0;
+        //Optimised Approach
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int i = 0;
+        int j = 0;
+        
+        while(j< n){
+            map.put(arr[j], map.getOrDefault(arr[j], 0) + 1);
+            while(map.size() > k){
+                map.put(arr[i], map.getOrDefault(arr[i], 0) - 1);
+                if(map.get(arr[i]) == 0) map.remove(arr[i]);
+                i+=1;
+            }
+            count += (j - i + 1);
+            j+=1;
+        }
+        return count;
+    }
+}
