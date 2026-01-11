@@ -1,0 +1,64 @@
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        int[][] prefixMat = new int[n][m];
+        int sum = 0;
+        for (int j = 0; j < m; j++) {
+            sum = 0;
+            for (int i = 0; i < n; i++) {
+                sum += matrix[i][j] - '0';
+                if (matrix[i][j] == '0')
+                    sum = 0;
+                prefixMat[i][j] = sum;
+            }
+        }
+        int maxRect = 0;
+        for (int i = 0; i < n; i++) {
+            maxRect = Math.max(maxRect, Histo(prefixMat[i]));
+        }
+        return maxRect;
+    }
+
+    private int Histo(int[] mat) {
+        int n = mat.length;
+
+        int[] nSmallerLeft = new int[n];
+        int[] nSmallerRight = new int[n];
+
+        nSmallerLeft[0] = -1;
+        nSmallerRight[n - 1] = n;
+
+        Stack<Integer> st = new Stack<>();
+        st.push(0);
+        for (int i = 1; i < n; i++) {
+            while (!st.isEmpty() && mat[st.peek()] >= mat[i]) {
+                st.pop();
+                if (st.isEmpty())
+                    nSmallerLeft[i] = -1;
+            }
+            if (!st.isEmpty())
+                nSmallerLeft[i] = st.peek();
+            st.push(i);
+        }
+        st.clear();
+        st.push(n - 1);
+        for (int i = n - 2; i >= 0; i--) {
+            while (!st.isEmpty() && mat[st.peek()] >= mat[i]) {
+                st.pop();
+                if (st.isEmpty())
+                    nSmallerRight[i] = n;
+            }
+            if (!st.isEmpty())
+                nSmallerRight[i] = st.peek();
+            st.push(i);
+        }
+        int area = 0;
+        for (int i = 0; i < n; i++) {
+            int len = nSmallerRight[i] - nSmallerLeft[i] - 1;
+            area = Math.max(area, mat[i] * len);
+        }
+        return area;
+    }
+}
