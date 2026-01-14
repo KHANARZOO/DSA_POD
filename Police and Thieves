@@ -1,0 +1,29 @@
+class Solution {
+    public int catchThieves(char[] arr, int k) {
+        int n = arr.length;
+        int p = 0;
+        int t = 0;
+        int count = 0;
+        while (p < n && arr[p] != 'P') p++;
+        while (t < n && arr[t] != 'T') t++;
+        while(t < n && p < n){
+            int diff = Math.abs(t - p);
+            if(diff <= k) {
+                count+=1;
+                p+=1;
+                t+=1;
+                while (p < n && arr[p] != 'P') p++;
+                while (t < n && arr[t] != 'T') t++;
+            }
+            else if(t < p) {
+                t+=1;
+                while (t < n && arr[t] != 'T') t++;
+            }
+            else if(p < t) {
+                p+=1;
+                while (p < n && arr[p] != 'P') p++;
+            }
+        }
+        return count;
+    }
+}
