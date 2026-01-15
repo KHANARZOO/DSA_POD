@@ -1,0 +1,53 @@
+class Solution {
+    public int minCandy(int arr[]) {
+        //Approach 1
+        int n = arr.length;
+        int[] L2R = new int[n];
+        int[] R2L = new int[n];
+        
+        Arrays.fill(L2R, 1);
+        Arrays.fill(R2L, 1);
+        
+        for(int i=1; i<n; i++){
+            if(arr[i] > arr[i - 1]) L2R[i] = L2R[i - 1] + 1;
+        }
+        for(int i = n-2; i>=0; i--){
+            if(arr[i] > arr[i + 1]) R2L[i] = R2L[i + 1] + 1;
+        }
+        int res = 0;
+        for(int i=0; i<n; i++){
+            res += Math.max(L2R[i], R2L[i]);
+        }
+        return res;
+    }
+}
+
+=============================================================================
+
+class Solution {
+    public int minCandy(int arr[]) {
+        //Approach 2
+        int candy = n;
+        int i = 1;
+        while(i < n){
+            while(i< n && arr[i] == arr[i - 1]){
+                i+=1;
+            }
+            int peak = 0;
+            while( i< n && arr[i] > arr[i - 1]) {
+                peak += 1;
+                candy += peak;
+                i+=1;
+                if(i == n) return candy;
+            }
+            int dip = 0;
+            while(i < n && arr[i] < arr[i - 1]){
+                dip +=1;
+                candy += dip;
+                i+=1;
+            }
+            candy -= Math.min(peak, dip);
+        }
+        return candy;
+    }
+}
