@@ -1,0 +1,41 @@
+class Solution {
+    int M = 1_000_000_007;
+    public int maximizeSquareArea(int m, int n, int[] hFences, int[] vFences) {
+        List<Integer> hFencesLi = new ArrayList<>();
+        List<Integer> vFencesLi = new ArrayList<>();
+        for (int i = 0; i < hFences.length; i++)
+            hFencesLi.add(hFences[i]);
+        for (int i = 0; i < vFences.length; i++)
+            vFencesLi.add(vFences[i]);
+
+        hFencesLi.add(1);
+        hFencesLi.add(m);
+
+        vFencesLi.add(1);
+        vFencesLi.add(n);
+
+        Collections.sort(hFencesLi);
+        Collections.sort(vFencesLi);
+
+        HashSet<Integer> set = new HashSet<>();
+
+        for (int i = 0; i < hFencesLi.size() - 1; i++) {
+            for (int j = i + 1; j < hFencesLi.size(); j++) {
+                set.add(hFencesLi.get(j) - hFencesLi.get(i));
+            }
+        }
+        int max = 0;
+        for (int i = 0; i < vFencesLi.size() - 1; i++) {
+            for (int j = i + 1; j < vFencesLi.size(); j++) {
+                int width = vFencesLi.get(j) - vFencesLi.get(i);
+                if (set.contains(width)) {
+                    max = Math.max(max, width);
+                }
+            }
+        }
+        if (max == 0)
+            return -1;
+        long area = (long) max * max;
+        return (int) (area % M);
+    }
+}
