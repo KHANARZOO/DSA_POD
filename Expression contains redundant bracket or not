@@ -1,0 +1,22 @@
+class Solution {
+    public static boolean checkRedundancy(String s) {
+        LinkedList<Character>stack = new LinkedList<>();
+        for(int i=0;i<s.length();i++){
+            char ch = s.charAt(i);
+            if(ch=='(' || ch==')' || ch=='+' || ch=='-' || ch=='*' || ch=='/'){
+                if(ch==')'){
+                    if(stack.peek()=='('){
+                        return true;
+                    }else{
+                        while(stack.peek()!='(')
+                            stack.pop();
+                            stack.pop();
+                    }
+                }else{
+                        stack.push(ch);
+                }
+            }
+        }
+        return false;
+    }
+}
