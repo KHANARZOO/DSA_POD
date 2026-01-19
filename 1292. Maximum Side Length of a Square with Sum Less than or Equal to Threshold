@@ -1,0 +1,49 @@
+class Solution {
+    public int maxSideLength(int[][] mat, int threshold) {
+        int n = mat.length;
+        int m = mat[0].length;
+
+        int[][] prefix = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                prefix[i][j] = (i > 0 ? prefix[i - 1][j] : 0) + (j > 0 ? prefix[i][j - 1] : 0)
+                        - ((i > 0 && j > 0) ? prefix[i - 1][j - 1] : 0) + mat[i][j];
+            }
+        }
+
+        int side = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+
+                for (int k = 0; k < Math.min(n - i, m - j); k++) {
+
+                    int diRow = i + k;
+                    int diCol = j + k;
+
+                    int sumSquare = findSum(i, j, diRow, diCol, prefix);
+
+                    if (sumSquare <= threshold) {
+                        side = Math.max(side, k + 1);
+                    } else
+                        break;
+                }
+            }
+        }
+        return side;
+    }
+
+    private int findSum(int stRow, int stCol, int edRow, int edCol, int[][] prefix) {
+        int sum = prefix[edRow][edCol];
+
+        if (stRow > 0)
+            sum -= prefix[stRow - 1][edCol];
+        if (stCol > 0)
+            sum -= prefix[edRow][stCol - 1];
+        if (stRow > 0 && stCol > 0)
+            sum += prefix[stRow - 1][stCol - 1];
+
+        return sum;
+    }
+}
