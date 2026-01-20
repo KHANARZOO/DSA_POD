@@ -1,0 +1,31 @@
+class Solution {
+    StringBuilder sb = new StringBuilder();
+    Stack<Character> st = new Stack<>();
+    ArrayList<Character> li = new ArrayList<>();
+    public void append(char x) {
+        // append x into document
+        sb.append(x);
+        st.push(x);
+        li.clear();
+    }
+
+    public void undo() {
+        // undo last change
+        if(!st.isEmpty()) li.add(st.pop());
+        sb.deleteCharAt(sb.length() - 1);
+    }
+
+    public void redo() {
+        // redo changes
+        if(li.size() != 0){
+            char last = li.remove(li.size() - 1); 
+            sb.append(last);
+            st.push(last);
+        }
+    }
+
+    public String read() {
+        // read the document
+        return sb.toString();
+    }
+}
