@@ -1,0 +1,77 @@
+class Solution {
+    public int subarrayRanges(int[] arr) {
+        int n = arr.length;
+        LinkedList<Integer> st = new LinkedList<>();
+        int[] nSmallerLeft = new int[n];
+        int[] nSmallerRight = new int[n];
+        
+        nSmallerLeft[0] = -1;
+        nSmallerRight[n - 1] = n;
+        st.add(0);
+        for(int i=1; i<n; i++){
+            while(!st.isEmpty() && arr[st.peek()] > arr[i]) {
+                st.pop();
+                if(st.isEmpty()){
+                     nSmallerLeft[i] = -1;
+                     break;
+                }
+            }
+            if(!st.isEmpty()) nSmallerLeft[i] = st.peek();
+            st.push(i);
+        }
+        st.clear();
+        st.add(n - 1);
+        
+        for(int i=n-2; i>=0; i--){
+            while(!st.isEmpty() && arr[st.peek()] >= arr[i]) st.pop();
+            if(st.isEmpty()) nSmallerRight[i] = n;
+            else nSmallerRight[i] = st.peek();
+            st.push(i);
+        }
+        st.clear();
+        
+        int[] nGreaterLeft = new int[n];
+        int[] nGreaterRight = new int[n];
+        
+        nGreaterLeft[0] = -1;
+        nGreaterRight[n - 1] = n;
+        st.add(0);
+        for(int i=1; i<n; i++){
+            while(!st.isEmpty() && arr[st.peek()] < arr[i]) st.pop();
+            if(st.isEmpty()) nGreaterLeft[i] = -1;
+            else nGreaterLeft[i] = st.peek();
+            st.push(i);
+        }
+        st.clear();
+        st.add(n - 1);
+        
+        for(int i=n-2; i>=0; i--){
+            while(!st.isEmpty() && arr[st.peek()] <= arr[i]) st.pop();
+            if(st.isEmpty()) nGreaterRight[i] = n;
+            else nGreaterRight[i] = st.peek();
+            st.push(i);
+        }
+        
+        // for(int i=0; i<n; i++){
+        //     System.out.print(nSmallerLeft[i]+" ");
+        // }
+        int minSum = 0;
+        int maxSum = 0;
+        for(int i=0; i<n; i++){
+            minSum +=  ((i - nSmallerLeft[i]) * (nSmallerRight[i] - i) * arr[i]);
+            maxSum +=  ((i - nGreaterLeft[i]) * (nGreaterRight[i] - i) * arr[i]);
+            
+        }
+        return maxSum - minSum;
+    }
+}
+/*
+[1, 2, 3] 
+nSmallerLeft[] = {-1, 0, 1}
+nSmallerRight[] = {3, 3, 3}
+contribution -> 0 - (-1) = 1, 3 - 0 = 3, 1*3*1 = 3
+
+nGreaterLeft[] = {-1, -1, -1}
+nGreaterRight[] = {1, 2, 3}
+contribution -> 0 - (-1) = 1, 1 - 0 = 1, 1*1*1 = 1
+*/
