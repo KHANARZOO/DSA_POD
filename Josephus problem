@@ -1,0 +1,23 @@
+class Solution {
+    int res;
+    public int josephus(int n, int k) {
+        res = 0;
+        List<Integer> li = new ArrayList<>();
+        for(int i=1; i<=n; i++){
+            li.add(i);
+        }
+        k = k - 1;
+        int idx = 0;
+        solve(li, idx, k);
+        return res;
+    }
+    private void solve(List<Integer> li, int idx, int k){
+        if(li.size() == 1){
+            res = li.get(0);
+            return;
+        }
+        idx = (idx + k) % li.size();
+        li.remove(idx);
+        solve(li, idx, k);
+    }
+}
