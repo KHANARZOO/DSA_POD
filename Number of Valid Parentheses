@@ -1,0 +1,21 @@
+class Solution {
+    int count;
+    int findWays(int n) {
+       count = 0;
+       if(n%2 == 1) return 0;
+       solve(n/2, 0, 0);
+       return count;
+    }
+    void solve(int n, int open, int close){
+           if(open == n && close == n) {
+               count+=1;
+               return;
+           }
+           if(open < n) solve(n, open + 1, close);
+           if(close < open) solve(n, open, close + 1);
+    }
+}
+/*
+()
+(()) ()()
+*/
