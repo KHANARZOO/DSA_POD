@@ -1,0 +1,57 @@
+class Solution {
+    class Pair {
+        int des;
+        int wt;
+
+        Pair(int des, int wt) {
+            this.des = des;
+            this.wt = wt;
+        }
+    }
+
+    class SortByWt
+    implements Comparator<Pair>{
+
+        public int compare(Pair a, Pair b) {
+            return a.wt - b.wt;
+        }
+    }
+
+    public int minCost(int n, int[][] edges) {
+        List<Pair>[] adj = new ArrayList[n];
+        for(int i=0; i<edges.length; i++)
+            adj[i] = new ArrayList<>();
+
+        for (int i = 0; i < edges.length; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            int wt = edges[i][2];
+
+            adj[u].add(new Pair(v, wt));
+            adj[v].add(new Pair(u, 2 * wt));
+        }
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(new SortByWt());
+        pq.add(new Pair(0, 0));
+
+        int[] minCost = new int[n];
+        Arrays.fill(minCost, Integer.MAX_VALUE);
+
+        while (!pq.isEmpty()) {
+            Pair curr = pq.remove();
+            int currDest = curr.des;
+            int currWt = curr.wt;
+            if(currWt > minDist[currDest]) continue;
+            for(Pair p : adj[currDest]){
+                int nDest = p.des;
+                int nWt = p.wt;
+
+                if(minCost[nDest] > minCost[currDest] + nWt){
+                    minCost[nDest] = minCost[currDest] + nWt;
+                    pq.add(new Pair(nDest, nWt));
+                }
+            }
+        }
+        return minDist[n - 1];
+    }
+}
