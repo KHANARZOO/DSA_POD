@@ -1,0 +1,50 @@
+class Solution {
+    int count;
+    public int countSubset(int[] arr, int k) {
+        int n = arr.length;
+        count = 0;
+        solve(0, 0, arr, n, k);
+        return count;
+    }
+    private void solve(int idx, int currSum, int[]arr, int n, int k){
+        if(idx == n){
+            if(currSum == k) count+=1;
+            return;
+        }
+        if(currSum > k) return;
+        currSum += arr[idx];
+        solve(idx + 1, currSum, arr, n, k);
+        currSum -= arr[idx];
+        solve(idx + 1, currSum, arr, n, k);
+    }
+}
+==============================================================================
+class Solution {
+    long[][]dp;
+    public int countSubset(int[] arr, int k) {
+        int n = arr.length;
+        long maxSum = 0, minSum = 0;
+        for (int x : arr) {
+            if (x > 0) maxSum += x;
+            else minSum += x;
+        }
+        if (k < minSum || k > maxSum) return 0;
+
+        dp = new long[n][k + 1];
+        for(int i=0; i<n; i++) Arrays.fill(dp[i], -1);
+        return (int)solve(0, 0, arr, n, k);
+    }
+    private long solve(int idx, int currSum, int[]arr, int n, int k){
+        if(idx == n){
+            if(currSum == k) return 1;
+            return 0;
+        }
+        if(currSum > k) return 0;
+        if(dp[idx][currSum] != -1) return dp[idx][currSum];
+        long take    = solve(idx + 1, currSum + arr[idx], arr, n, k);
+        long notTake = solve(idx + 1, currSum, arr, n, k);
+        
+        
+        return dp[idx][currSum] = take + notTake;
+    }
+}
