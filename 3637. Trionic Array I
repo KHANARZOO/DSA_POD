@@ -1,0 +1,54 @@
+class Solution {
+    public boolean isTrionic(int[] nums) {
+        int ans = -1;  // This keeps track of the current phase
+        int n = nums.length;
+
+        for (int i = 1; i < n; i++) {
+            // Phase 0: Strictly increasing
+            if (nums[i] > nums[i - 1] && (ans == -1 || ans == 0)) {
+                ans = 0;  // We are in the increasing phase
+            }
+            // Phase 1: Strictly decreasing
+            else if (nums[i] < nums[i - 1] && (ans == 0 || ans == 1)) {
+                ans = 1;  // We transitioned to decreasing phase
+            }
+            // Phase 2: Strictly increasing again
+            else if (nums[i] > nums[i - 1] && (ans == 1 || ans == 2)) {
+                ans = 2;  // We transitioned to final increasing phase
+            }
+            // If none of the valid transitions are met, return false
+            else {
+                return false;  // The pattern is broken
+            }
+        }
+
+        // To be a trionic sequence, we must have reached phase 2
+        return ans == 2;
+    }
+}
+/*
+int[] nums = {1, 4, 3, 6};
+Iteration 1 (i = 1):
+Compare nums[1] = 4 and nums[0] = 1
+Since 4 > 1 and ans == -1, it means we are in the first increasing phase
+So, update ans = 0
+✅ Valid transition
+
+Iteration 2 (i = 2):
+Compare nums[2] = 3 and nums[1] = 4
+Since 3 < 4 and ans == 0, it means we are moving to the decreasing phase
+So, update ans = 1
+✅ Valid transition
+
+Iteration 3 (i = 3):
+Compare nums[3] = 6 and nums[2] = 3
+Since 6 > 3 and ans == 1, it means we are moving to the final increasing phase
+So, update ans = 2
+✅ Valid transition
+
+✅ After Loop Ends:
+ans == 2 → so the array followed:
+increasing → decreasing → increasing
+
+Hence, return true
+*/
