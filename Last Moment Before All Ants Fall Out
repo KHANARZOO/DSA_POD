@@ -1,0 +1,23 @@
+class Solution {
+    public int getLastMoment(int n, int left[], int right[]) {
+        int max = 0;
+        
+        for(int i=0; i<left.length; i++)
+            max = Math.max(max, left[i]);
+            
+        for(int i=0; i<right.length; i++){
+            max = Math.max(max, n - right[i]);
+        }
+        return max;
+    }
+}
+/*
+When two ants collide and turn around, it’s equivalent to them passing through each other if ants are indistinguishable.
+So instead of simulating collisions, we can:
+Treat every ant as moving straight until it falls off the plank.
+
+Plank length = n
+Ants in left[] move left, so the time they take to fall = their position itself.
+Ants in right[] move right, so the time they take to fall = n - position.
+We just need the maximum time among all ants.
+*/
