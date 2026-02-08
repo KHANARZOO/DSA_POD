@@ -1,0 +1,20 @@
+class Solution {
+    boolean isBalancedTree = true;
+
+    public boolean isBalanced(TreeNode root) {
+        if (root == null)
+            return true;
+        findHeight(root);
+        return isBalancedTree;
+    }
+
+    private int findHeight(TreeNode root) {
+        if (root == null)
+            return -1;
+        int leftH = findHeight(root.left);
+        int rightH = findHeight(root.right);
+        if (Math.abs(leftH - rightH) > 1)
+            isBalancedTree = false;
+        return 1 + Math.max(leftH, rightH);
+    }
+}
