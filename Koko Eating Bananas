@@ -1,0 +1,29 @@
+class Solution {
+    public int kokoEat(int[] arr, int k) {
+        int n = arr.length;
+        int minTime = 1; //1 banana/hr
+        int maxTime = 0;
+        int res = 0;
+        for(int i=0; i<n; i++) maxTime = Math.max(maxTime, arr[i]);
+        
+        while(minTime <= maxTime){
+            int mid = minTime + (maxTime - minTime)/2;
+            
+            if(isPossible(mid, arr, k)){
+                res = mid;
+                maxTime = mid - 1;
+            }else minTime = mid + 1;
+        }
+        return res;
+    }
+    private boolean isPossible(int mid, int[] arr, int k){
+        int n = arr.length;
+        int time = 0;
+        
+        for(int i=0; i<n; i++){
+            time += (int)Math.ceil((double)arr[i]/ mid);
+            if(time > k) return false;
+        }
+        return true;
+    }
+}
