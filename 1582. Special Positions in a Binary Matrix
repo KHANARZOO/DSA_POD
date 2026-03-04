@@ -1,0 +1,62 @@
+class Solution {
+    int n;
+    int m;
+    public int numSpecial(int[][] mat) {
+        n = mat.length;
+        m = mat[0].length;
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 1) {
+                    if (checkRow(i, j, mat) && checkCol(i, j, mat))
+                        count += 1;
+                }
+            }
+        }
+        return count;
+    }
+
+    private boolean checkRow(int row, int col, int[][] mat) {
+        for (int i = 0; i < m; i++) {
+            if (i != col && mat[row][i] != 0)
+                return false;
+        }
+        return true;
+    }
+
+    private boolean checkCol(int row, int col, int[][] mat) {
+        for (int i = 0; i < n; i++) {
+            if (i != row && mat[i][col] != 0)
+                return false;
+        }
+        return true;
+    }
+}
+================================================================================================================
+class Solution {
+    int n;
+    int m;
+    public int numSpecial(int[][] mat) {
+        n = mat.length;
+        m = mat[0].length;
+        int count = 0;
+        int[] row = new int[n];
+        int[] col = new int[m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == 1) {
+                    row[i] += 1;
+                    col[j] += 1;
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if(mat[i][j] == 1 && row[i] == 1 && col[j] == 1)
+                    count+=1;
+            }
+        }
+        return count;
+    }
