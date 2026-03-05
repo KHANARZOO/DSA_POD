@@ -1,0 +1,44 @@
+class Solution {
+    public int minOperations(String s) {
+        int n = s.length();
+        int startWithOne = 0; //10101 even -> 1 odd -> 0
+        int startWithZero = 0; //01010 even -> 0 odd -> 1
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if ((i % 2) == 0) {
+                if (ch - '0' == 0) // even -> 0 --> 0101
+                    startWithOne += 1;
+                else // even -> 1 --> 10101
+                    startWithZero += 1;
+            } else {
+                if (ch - '0' == 0) // odd -> 0 --> 10101
+                    startWithZero += 1;
+                else // odd -> 1 --> 0101
+                    startWithOne += 1;
+            }
+        }
+        return Math.min(startWithOne, startWithZero);
+    }
+}
+===================================================================
+class Solution {
+    public int minOperations(String s) {
+        int n = s.length();
+        int startWithOne = 0; //10101 even -> 1 odd -> 0
+        int startWithZero = 0; //01010 even -> 0 odd -> 1
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if ((i % 2) == 0) {
+                if (ch - '0' != 0)
+                    startWithZero += 1;
+            } else {
+                if (ch - '0' == 0) // odd -> 0 --> 10101
+                    startWithZero += 1;
+            }
+        }
+        startWithOne = n - startWithZero;
+        return Math.min(startWithOne, startWithZero);
+    }
+}
