@@ -1,0 +1,109 @@
+class Solution {
+    public static String minWindow(String s, String p) {
+        int n = s.length();
+        int m = p.length();
+        int start = -1;
+        int minLen = Integer.MAX_VALUE;
+        Map<Character, Integer> map = new HashMap<>();
+        for(int i=0; i<m; i++)
+            map.put(p.charAt(i), map.getOrDefault(p.charAt(i), 0) + 1);
+        
+        int i =0;
+        int j =0;
+        int match = 0;
+        while( j< n){
+            if(map.containsKey(s.charAt(j))){
+                map.put(s.charAt(j), map.put(s.charAt(j), 0) - 1);
+                if(map.get(s.charAt(j)) >= 0)
+                    match +=1;
+            }
+            while(match == m){
+                if(minLen > (j - i + 1)){
+                    minLen = j - i + 1;
+                    start = i;
+                }
+                if(map.containsKey(s.charAt(i))){
+                    map.put(s.charAt(i), map.put(s.charAt(i), 0) + 1);
+                    if(map.get(s.charAt(i)) > 0)
+                        match -=1;
+                }
+                i+=1;
+            }
+             j+=1;
+        }
+        if(start != -1) return s.substring(start, start + minLen);
+        return "";
+    }
+}
+/*
+mapP 
+    t - 1
+    o - 1
+    c - 1
+i = 0
+j = 0
+1. mapP 
+    t - 0
+    o - 1
+    c - 1
+    
+    match = 1
+    i = 0
+    j = 1
+    
+2. j = 2 continue
+3. j = 3 continue
+4. j = 4 continue
+5. mapP 
+    t - -1
+    o - 1
+    c - 1
+    
+    match = 1
+    i = 0
+    j = 5
+6. mapP 
+    t - -1
+    o - 0
+    c - 1
+    
+    match = 2
+    i = 0
+    j = 6
+7. j = 7 continue
+8. j = 8 continue
+9. j = 9 continue
+10. mapP 
+    t - -1
+    o - 0
+    c - 0
+    
+    match = 3
+    i = 0
+    mapP 
+    t - 1
+    o - 0
+    c - 0
+    
+    match = 2
+    i = 5
+    j = 10
+11. mapP 
+    t - 0
+    o - 0
+    c - 0
+    
+    match = 3
+    i = 5
+    mapP 
+    t - 0
+    o - 1
+    c - 0
+    
+    match = 2
+    
+    -> minLen = 9 - 5 + 1 = 5
+    -> substring = 5 -> 5 + 5 = 10 from 5th idx to 9th idx
+    
+    
+*/
