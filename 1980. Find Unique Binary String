@@ -1,0 +1,35 @@
+class Solution {
+    public String findDifferentBinaryString(String[] nums) {
+        int n = nums.length;
+        Set<Integer> set = new HashSet<>();
+        String res = "";
+        for (String s : nums)
+            set.add(Integer.parseInt(s, 2)); //converts string to binary number
+
+        for (int i = 0; i <= (1 << n); i++) {
+            if (!set.contains(i)){
+                res = Integer.toBinaryString(i); //converts int to binary and store it as String
+                while (res.length() < n)
+                    res = "0" + res;
+                return res;
+            }
+        }
+        return res;
+    }
+}
+===============================================================
+class Solution {
+    public String findDifferentBinaryString(String[] nums) {
+        int n = nums.length;
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < n; i++) {
+            String s = nums[i];
+            if (s.charAt(i) == '1')
+                sb.append('0');
+            else
+                sb.append('1');
+        }
+        return sb.toString();
+    }
+}
