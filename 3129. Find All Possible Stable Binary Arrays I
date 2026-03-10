@@ -1,0 +1,37 @@
+class Solution {
+    int MOD = 1_000_000_007;
+    int dp[][][];
+
+    public int numberOfStableArrays(int zero, int one, int limit) {
+        dp = new int[201][201][2];
+        for (int[][] a : dp) 
+            for (int[] b : a) 
+                Arrays.fill(b, -1);
+        int startWithOne = solve(zero, one, limit, 0);
+        int startWithZero = solve(zero, one, limit, 1);
+
+        return (startWithOne + startWithZero) % MOD;
+    }
+
+    private int solve(int zeroLeft, int oneLeft, int limit, int lastWasOne) {
+        if (zeroLeft == 0 && oneLeft == 0)
+            return 1;
+        if (dp[zeroLeft][oneLeft][lastWasOne] != -1)
+            return dp[zeroLeft][oneLeft][lastWasOne];
+        int res = 0;
+
+        if (lastWasOne == 1) {
+            //explore zero's
+            for (int i = 1; i <= Math.min(zeroLeft, limit); i++) {
+                res = (res + solve(zeroLeft - i, oneLeft, limit, 0)) % MOD;
+            }
+        } else {
+            //explore one's
+            for (int i = 1; i <= Math.min(oneLeft, limit); i++) {
+                res = (res + solve(zeroLeft, oneLeft - i, limit, 1)) % MOD;
+            }
+        }
+        dp[zeroLeft][oneLeft][lastWasOne] = res;
+        return dp[zeroLeft][oneLeft][lastWasOne];
+    }
+}
