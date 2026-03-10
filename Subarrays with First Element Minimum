@@ -1,0 +1,16 @@
+class Solution {
+    public int countSubarrays(int[] arr) {
+        int n = arr.length;
+        int minEle = 0;
+        int count = 0;
+        
+        for(int i=0; i<n; i++){
+            minEle = arr[i];
+            for(int j=i; j<n; j++){
+                if(arr[j] < minEle) break;
+                else count+=1;
+            }
+        }
+        return count;
+    }
+}
